@@ -9,7 +9,7 @@ name: Security gates
 
 on:
   workflow_dispatch: # the manual "Run workflow" button on the Actions tab
-  # pull_request: # LAB STEP 3: put your cursor on this line and press Ctrl+/ (Cmd+/ on a Mac)
+  pull_request: # LAB STEP 3: put your cursor on this line and press Ctrl+/ (Cmd+/ on a Mac)
 
 # Least privilege: the pipeline's token can read the code and nothing else.
 # Findings are reported with annotations and a job summary, which need no
