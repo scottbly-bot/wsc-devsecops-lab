@@ -63,6 +63,8 @@ def me():
 @app.get("/api/users/<int:user_id>")
 @login_required
 def user_profile(user_id):
+    if user_id != session["user_id"]:
+        abort(403)
     user = db.find_user_by_id(user_id)
     if user is None:
         abort(404)

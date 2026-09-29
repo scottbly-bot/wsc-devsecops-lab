@@ -31,18 +31,23 @@ def test_user_profile_requires_login(client):
 
 def test_user_profile_returns_database_record(client):
     client.get("/login/alice")
-    response = client.get("/api/users/2")
+    response = client.get("/api/users/1")
     assert response.status_code == 200
     assert response.get_json() == {
-        "user_id": 2,
-        "username": "bob",
-        "full_name": "Bob Baptiste",
-        "email": "bob@example.com",
-        "phone": "555-0102",
-        "home_address": "202 Oak St, Riverton",
+        "user_id": 1,
+        "username": "alice",
+        "full_name": "Alice Anand",
+        "email": "alice@example.com",
+        "phone": "555-0101",
+        "home_address": "101 Maple Ave, Springfield",
     }
+
+
+def test_user_profile_rejects_another_users_id(client):
+    client.get("/login/alice")
+    assert client.get("/api/users/2").status_code == 403
 
 
 def test_user_profile_rejects_unknown_id(client):
     client.get("/login/alice")
-    assert client.get("/api/users/999").status_code == 404
+    assert client.get("/api/users/999").status_code == 403
