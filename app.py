@@ -60,6 +60,22 @@ def me():
     return jsonify(user_id=session["user_id"], username=session["username"])
 
 
+@app.get("/api/users/<int:user_id>")
+@login_required
+def user_profile(user_id):
+    user = db.find_user_by_id(user_id)
+    if user is None:
+        abort(404)
+    return jsonify(
+        user_id=user["id"],
+        username=user["username"],
+        full_name=user["full_name"],
+        email=user["email"],
+        phone=user["phone"],
+        home_address=user["home_address"],
+    )
+
+
 if __name__ == "__main__":
     db.init_db(app.config["DATABASE"])
     app.run(host="127.0.0.1", port=5000)

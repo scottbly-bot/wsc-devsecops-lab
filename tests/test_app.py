@@ -23,3 +23,26 @@ def test_me_shows_who_is_logged_in(client):
     response = client.get("/api/me")
     assert response.status_code == 200
     assert response.get_json() == {"user_id": 2, "username": "bob"}
+
+
+def test_user_profile_requires_login(client):
+    assert client.get("/api/users/1").status_code == 401
+
+
+def test_user_profile_returns_database_record(client):
+    client.get("/login/alice")
+    response = client.get("/api/users/2")
+    assert response.status_code == 200
+    assert response.get_json() == {
+        "user_id": 2,
+        "username": "bob",
+        "full_name": "Bob Baptiste",
+        "email": "bob@example.com",
+        "phone": "555-0102",
+        "home_address": "202 Oak St, Riverton",
+    }
+
+
+def test_user_profile_rejects_unknown_id(client):
+    client.get("/login/alice")
+    assert client.get("/api/users/999").status_code == 404
